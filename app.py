@@ -4,6 +4,9 @@ from config import Config
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_migrate import Migrate
+import os
+import sys
+sys.paht.append(os.path.dirname(__file__))
 
 # Initialize Flask app
 app = Flask(__name__)

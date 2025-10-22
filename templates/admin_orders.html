@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>📦 Manage Orders</h2>
+
+  {% if orders %}
+  <table class="table table-bordered align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>ID</th>
+        <th>User</th>
+        <th>Date</th>
+        <th>Total</th>
+        <th>Paid</th>
+        <th>Shipping Status</th>
+        <th>Update</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in orders %}
+      <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.user_id }}</td>
+        <td>{{ order.date.strftime('%Y-%m-%d %H:%M') }}</td>
+        <td>${{ "%.2f"|format(order.total) }}</td>
+        <td>{{ '✅' if order.is_paid else '❌' }}</td>
+        <td>{{ order.shipping_status }}</td>
+        <td>
+          <form action="{{ url_for('update_shipping', order_id=order.id) }}" method="POST" class="d-inline">
+            <select name="status" class="form-select form-select-sm">
+              <option value="Processing" {% if order.shipping_status == "Processing" %}selected{% endif %}>Processing</option>
+              <option value="Shipped" {% if order.shipping_status == "Shipped" %}selected{% endif %}>Shipped</option>
+              <option value="In Transit" {% if order.shipping_status == "In Transit" %}selected{% endif %}>In Transit</option>
+              <option value="Delivered" {% if order.shipping_status == "Delivered" %}selected{% endif %}>Delivered</option>
+            </select>
+            <button type="submit" class="btn btn-primary btn-sm mt-2">Update</button>
+          </form>
+
+
+        </td>
+        <td>
+          <span class="badge 
+            {% if order.shipping_status == 'Delivered' %}bg-success
+            {% elif order.shipping_status == 'Out for Delivery' %}bg-warning
+            {% elif order.shipping_status == 'Shipped' %}bg-info
+            {% else %}bg-secondary{% endif %}">
+            {{ order.shipping_status }}
+          </span>
+        </td>
+
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No orders found.</p>
+  {% endif %}
+</div>
+{% endblock %}

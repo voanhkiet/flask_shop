@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h2>📊 Admin Dashboard</h2>
+
+  <div class="row mt-4">
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">👤 Users</h5>
+          <p class="display-6 fw-bold">{{ total_users }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">🛍️ Products</h5>
+          <p class="display-6 fw-bold">{{ total_products }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">📦 Orders</h5>
+          <p class="display-6 fw-bold">{{ total_orders }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-center shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">💰 Revenue</h5>
+          <p class="display-6 fw-bold">${{ "%.2f"|format(total_revenue) }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-5">
+    <h4>📈 Recent Orders Revenue</h4>
+    <canvas id="revenueChart" height="100"></canvas>
+  </div>
+
+  <div class="text-center mt-4">
+    <a href="{{ url_for('admin_products') }}" class="btn btn-primary">⚙️ Manage Products</a>
+  </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('revenueChart');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: {{ chart_labels|tojson }},
+    datasets: [{
+      label: 'Order Revenue ($)',
+      data: {{ chart_data|tojson }},
+      borderWidth: 1
+    }]
+  },
+  options: {
+    scales: { y: { beginAtZero: true } }
+  }
+});
+</script>
+{% endblock %}

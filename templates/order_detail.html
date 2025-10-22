@@ -1,0 +1,122 @@
+{% extends "base.html" %} {% block title %}Order #{{ order.id }} | Mini Shop{%
+endblock %} {% block content %}
+<div class="container mt-4">
+  <h2 class="text-center mb-4">🧾 Order #{{ order.id }}</h2>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <p><strong>Date:</strong> {{ order.date.strftime('%Y-%m-%d %H:%M') }}</p>
+      <p><strong>Total:</strong> ${{ "%.2f"|format(order.total) }}</p>
+    </div>
+  </div>
+
+  <h4>Items</h4>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in order.items %}
+      <tr>
+        <td>{{ item.product_name }}</td>
+        <td>${{ "%.2f"|format(item.price) }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>${{ "%.2f"|format(item.price * item.quantity) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="text-end mt-3">
+    <a href="{{ url_for('orders') }}" class="btn btn-secondary"
+      >← Back to Orders</a
+    >
+    <a
+      href="{{ url_for('download_invoice', order_id=order.id) }}"
+      class="btn btn-secondary"
+    >
+      🧾 Download Invoice (PDF)
+    </a>
+  </div>
+  <h3>📦 Shipping Progress</h3>
+
+<div class="shipping-timeline">
+  {% set stages = ["Processing", "Shipped", "In Transit", "Delivered"] %}
+  {% for stage in stages %}
+    <div class="stage {% if order.shipping_status == stage or stages.index(stage) < stages.index(order.shipping_status) %}active{% endif %}">
+      <div class="circle">
+        {% if stages.index(stage) < stages.index(order.shipping_status) %}
+          ✅
+        {% elif stage == order.shipping_status %}
+          🚚
+        {% else %}
+          ⚪
+        {% endif %}
+      </div>
+      <p>{{ stage }}</p>
+    </div>
+    {% if not loop.last %}
+      <div class="line {% if stages.index(order.shipping_status) > loop.index0 %}filled{% endif %}"></div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+<style>
+.shipping-timeline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 30px 0;
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 12px;
+}
+
+.stage {
+  text-align: center;
+  flex: 1;
+  position: relative;
+}
+
+.circle {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 50%;
+  background: #ddd;
+  margin: 0 auto;
+  font-size: 18px;
+}
+
+.stage.active .circle {
+  background: #4CAF50;
+  color: white;
+}
+
+.stage p {
+  margin-top: 8px;
+  font-weight: 600;
+  color: #333;
+}
+
+.line {
+  flex: 1;
+  height: 4px;
+  background: #ccc;
+  margin: 0 5px;
+  border-radius: 2px;
+}
+
+.line.filled {
+  background: #4CAF50;
+}
+</style>
+
+
+</div>
+{% endblock %}

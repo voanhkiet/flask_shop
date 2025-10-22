@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="edit-profile-container">
+  <h2>👤 Edit Profile</h2>
+  <p>Update your account information below.</p>
+
+<form method="POST" enctype="multipart/form-data">
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input type="text" name="username" class="form-control" value="{{ current_user.username }}" required>
+  </div>
+
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input type="email" name="email" class="form-control" value="{{ current_user.email }}" required>
+  </div>
+
+  <div class="form-group">
+    <label for="password">New Password</label>
+    <input type="password" name="password" class="form-control" placeholder="Leave blank to keep current password">
+  </div>
+
+  <div class="form-group">
+    <label for="avatar">Profile Picture</label>
+    <input type="file" name="avatar" accept="image/*" class="form-control">
+
+    <!-- Preview Container -->
+<label>Profile Picture</label>
+<div id="avatarWrapper" style="position: relative; display: inline-block; cursor: pointer;">
+  <img id="avatarPreview" 
+       src="{{ url_for('static', filename='uploads/avatars/' + current_user.avatar) }}"
+       alt="Avatar"
+       style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 2px solid #ccc;">
+  <div id="overlayText" 
+       style="position: absolute; bottom: 0; width: 100%; text-align: center; background: rgba(0,0,0,0.5); color: white; font-size: 12px; border-radius: 0 0 50% 50%; display: none;">
+    Change
+  </div>
+</div>
+<input type="file" name="avatar" id="avatarInput" accept="image/*" class="form-control" style="display:none;">
+
+
+  <button type="submit" class="btn btn-success mt-3">💾 Save Changes</button>
+</form>
+
+
+  <a href="{{ url_for('dashboard') }}" class="back-link">← Back to Dashboard</a>
+</div>
+
+<style>
+  #avatarPreview {
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+#avatarPreview:hover {
+  transform: scale(1.05);
+  border-color: #4caf50;
+}
+
+.avatar-section {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.avatar-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+  margin-bottom: 10px;
+}
+#avatar {
+  display: block;
+  margin: 0 auto;
+}
+</style>
+<script>
+const avatarInput = document.getElementById('avatarInput');
+const avatarPreview = document.getElementById('avatarPreview');
+const overlayText = document.getElementById('overlayText');
+const avatarWrapper = document.getElementById('avatarWrapper');
+
+// Click to open file selector
+avatarWrapper.addEventListener('click', () => avatarInput.click());
+
+// Hover effect
+avatarWrapper.addEventListener('mouseenter', () => overlayText.style.display = 'block');
+avatarWrapper.addEventListener('mouseleave', () => overlayText.style.display = 'none');
+
+// Preview selected image
+avatarInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (event) => avatarPreview.src = event.target.result;
+    reader.readAsDataURL(file);
+  }
+});
+</script>
+
+
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Order Confirmation | Mini Shop{% endblock %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+  <h1 class="text-success">✅ Thank You for Your Order!</h1>
+  <p class="lead mt-3">Your order has been placed successfully.</p>
+
+  <div class="card mt-4 mx-auto" style="max-width: 400px;">
+    <div class="card-body">
+      <h5 class="card-title">Order #{{ order.id }}</h5>
+      <p><strong>Date:</strong> {{ order.date.strftime('%Y-%m-%d %H:%M') }}</p>
+      <p><strong>Total:</strong> ${{ "%.2f"|format(order.total) }}</p>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <a href="{{ url_for('orders') }}" class="btn btn-primary me-2">📦 View My Orders</a>
+    <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">🏠 Return to Shop</a>
+  </div>
+</div>
+{% endblock %}

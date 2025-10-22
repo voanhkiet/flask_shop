@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <body style="font-family: Arial, sans-serif; line-height: 1.5;">
+    <h2>📦 Flask Shop Order Update</h2>
+    <p>Hi {{ user.username }},</p>
+    <p>Your order <b>#{{ order.id }}</b> status has been updated to:
+      <b style="color:blue;">{{ order.shipping_status }}</b>.</p>
+
+    <p>Track your progress:</p>
+    <div style="width:100%; background:#eee; border-radius:10px; overflow:hidden;">
+      <div style="width:{{ (order.shipping_stage_index + 1) * 25 }}%; background:#4CAF50; color:white; text-align:center; padding:5px 0;">
+        {{ order.shipping_status }}
+      </div>
+    </div>
+
+    <p>Thank you for shopping with Flask Shop!</p>
+  </body>
+</html>

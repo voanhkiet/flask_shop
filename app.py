@@ -28,12 +28,18 @@ def load_user(user_id):
     from models import User
     return db.session.get(User, int(user_id))
 
-# ✅ Import routes safely (works both locally and on Render)
+# ✅ Import routes safely for both local and Render
 def register_routes():
+    import importlib
     try:
-        import routes  # local import
-    except ModuleNotFoundError:
-        from flask_shop import routes  # fallback for Render
+        import routes  # Works when running locally or on Render
+        print("✅ Imported routes successfully.")
+    except ModuleNotFoundError as e:
+        print("⚠️ Could not import routes:", e)
+        print("🔧 Current directory:", os.getcwd())
+        print("🔧 sys.path:", sys.path)
+        routes = importlib.import_module('routes')
+    return routes
 
 register_routes()
 

@@ -544,3 +544,11 @@ def edit_profile():
         return redirect(url_for("dashboard"))
 
     return render_template("edit_profile.html")
+
+@app.route("/health")
+def health():
+    return {"status": "ok", "message": "Flask app is running fine!"}, 200
+
+@app.route("/ping")
+def ping():
+    return "pong", 200

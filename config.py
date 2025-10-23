@@ -6,7 +6,7 @@ load_dotenv()
 
 class Config:
     # Flask core
-    SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
+    SECRET_KEY = os.getenv("SECRET_KEY", "devkey")
 
     # Database
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")

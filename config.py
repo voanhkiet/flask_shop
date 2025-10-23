@@ -5,12 +5,15 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
-    # Flask core
-    SECRET_KEY = os.getenv("SECRET_KEY", "devkey")
+    # Get database URL from .env
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
 
-    # Database
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
+    # Fallback to SQLite if not found (useful for local development)
+    if not SQLALCHEMY_DATABASE_URI:
+        SQLALCHEMY_DATABASE_URI = "sqlite:///shop.db"
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = os.getenv("SECRET_KEY", "dev_secret_key")
 
     # Stripe
     STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")

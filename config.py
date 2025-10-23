@@ -6,10 +6,10 @@ load_dotenv()
 
 class Config:
     # Flask core
-    SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret")
+    SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
 
     # Database
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///shop.db")
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Stripe

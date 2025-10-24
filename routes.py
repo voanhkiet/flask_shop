@@ -8,11 +8,12 @@ from datetime import datetime
 import stripe
 import os
 
+
 from models import db, User, Product, Order, OrderItem
 from flask import current_app as app  # ✅ make sure this is used, not from app import app
 from app import mail  # ✅ this must be exactly like this
 
-
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
 
 def allowed_file(filename):

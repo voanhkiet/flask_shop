@@ -18,6 +18,7 @@ class Product(db.Model):
   price = db.Column(db.Float, nullable=False)
   description = db.Column(db.String(200))
   image = db.Column(db.String(200), nullable=True)
+  stock = db.Column(db.Integer, default=0) # 🆕 new field
 
 class Order(db.Model):
   id = db.Column(db.Integer, primary_key=True)

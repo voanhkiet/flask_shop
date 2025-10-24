@@ -1,29 +1,31 @@
 import os
 import sys
 
-# ✅ Ensure project directory is in sys.path
+# ✅ Ensure project directory is in sys.path early
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 if BASE_DIR not in sys.path:
     sys.path.append(BASE_DIR)
-    
+
 from dotenv import load_dotenv
 from flask import Flask
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_migrate import Migrate
 from config import Config
-from models import db  # ✅ import db from models.py (only one instance)
+from models import db  # ✅ Now Flask will find this correctly
 
-# ✅ Ensure environment variables load
+# ✅ Load environment variables
 load_dotenv()
 
-
-
-# ✅ Initialize Flask
-app = Flask(__name__)
+# ✅ Initialize Flask app
+app = Flask(
+    __name__,
+    template_folder="templates",
+    static_folder= "static"
+)
 app.config.from_object(Config)
 
-# ✅ Initialize extensions with *the same app*
+# ✅ Initialize extensions
 db.init_app(app)
 mail = Mail(app)
 login_manager = LoginManager(app)
@@ -34,9 +36,11 @@ def load_user(user_id):
     from models import User
     return db.session.get(User, int(user_id))
 
-# ✅ Import routes inside app context
+# ✅ Import routes after app setup
 with app.app_context():
-    import routes  # this should now import fine
+    print(">>> Loading routes.py ...") # Add this
+    import routes
+    print(">>> Routes successfully imported!") # Addd this
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5001)

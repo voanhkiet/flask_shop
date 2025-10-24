@@ -9,7 +9,11 @@ import stripe
 import os
 
 from models import db, User, Product, Order, OrderItem
-from app import app, mail
+from flask import current_app as app  # ✅ make sure this is used, not from app import app
+from app import mail  # ✅ this must be exactly like this
+
+
+
 
 def allowed_file(filename):
     ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
@@ -552,3 +556,19 @@ def health():
 @app.route("/ping")
 def ping():
     return "pong", 200
+
+
+@app.route('/update_stock/<int:product_id>', methods=['POST'])
+def update_stock(product_id):
+    product = Product.query.get_or_404(product_id)
+    new_stock = request.form.get('stock', type=int)
+    
+    if new_stock is not None and new_stock >= 0:
+        product.stock = new_stock
+        db.session.commit()
+        flash(f"✅ Stock updated for {product.name} — now {product.stock}", "success")
+    else:
+        flash("⚠️ Invalid stock value", "danger")
+
+    return redirect(url_for('dashboard'))
+

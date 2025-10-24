@@ -9,7 +9,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
 
     # Fallback to SQLite if not found (useful for local development)
-    if not SQLALCHEMY_DATABASE_URI:
+    if  SQLALCHEMY_DATABASE_URI is None:
         SQLALCHEMY_DATABASE_URI = "sqlite:///shop.db"
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False

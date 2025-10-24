@@ -5,13 +5,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
-    # Get database URL from .env
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
+    # Normalize DATABASE_URL for SQLAlchemy
+    db_url = os.getenv("DATABASE_URL")
+    if db_url and db_url.startswith("postgres://"):
+        db_url = db_url.replace("postgres://", "postgresql://", 1)
 
-    # Fallback to SQLite if not found (useful for local development)
-    if  SQLALCHEMY_DATABASE_URI is None:
-        SQLALCHEMY_DATABASE_URI = "sqlite:///shop.db"
-
+    SQLALCHEMY_DATABASE_URI = db_url or "sqlite:///shop.db"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = os.getenv("SECRET_KEY", "dev_secret_key")
 

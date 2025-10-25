@@ -40,3 +40,10 @@ class Config:
     # File uploads
     UPLOAD_FOLDER = "static/uploads/avatars"
     ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
+
+# Security — HTTPS-only cookies
+SESSION_COOKIE_SECURE = True          # Only send cookies over HTTPS
+REMEMBER_COOKIE_SECURE = True         # Flask-Login "remember me" cookies
+SESSION_COOKIE_HTTPONLY = True        # Prevent JavaScript access to cookies
+REMEMBER_COOKIE_HTTPONLY = True       # Also protect Flask-Login cookies
+SESSION_COOKIE_SAMESITE = "Lax"       # Helps prevent CSRF attacks
